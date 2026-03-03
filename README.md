@@ -14,7 +14,7 @@ npx skills add gabrieldejesusrodrigues/agent-skills
 
 | Skill | Description |
 |-------|-------------|
-| [startup-idea-validator](skills/startup-idea-validator/) | Multi-agent startup idea validation system that scrapes r/Startup_Ideas and evaluates ideas through Product, Business, and Devil's Advocate perspectives |
+| [startup-idea-validator](skills/startup-idea-validator/) | Multi-agent startup idea validation system. Searches any user-specified source (Reddit, HN, Product Hunt, web) within a user-specified time window and evaluates ideas through Product, Business, and Devil's Advocate agent perspectives |
 
 ## License
 
