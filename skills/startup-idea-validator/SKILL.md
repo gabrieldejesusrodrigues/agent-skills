@@ -32,7 +32,40 @@ If the user omits either, **ask them to specify before proceeding**. Do not assu
 ## Source Handling
 
 ### Reddit
-Fetch posts from the specified subreddit(s) within the time window. Use Reddit's sorting (new/hot) as appropriate for the time range.
+Use Reddit's public JSON API via cURL to fetch posts. Do NOT use web scraping or browser-based fetching.
+
+**Endpoint pattern:**
+```
+https://www.reddit.com/r/{subreddit}/new.json?limit=100&t={time_filter}
+```
+
+**Query parameters:**
+- `limit`: Number of posts to fetch (max 100 per request). Use `100`.
+- `t`: Time filter — `hour`, `day`, `week`, `month`, `year`, `all`. Map the user's time window to the closest value.
+- `after`: Pagination token. If more posts are needed, use the `after` value from the response's `data.after` field to fetch the next page.
+
+**Sorting endpoints:**
+- `/new.json` — Most recent posts. Best for short time windows (24h, 7 days).
+- `/top.json?t={time}` — Top posts within time range. Best for longer windows (month, year).
+- `/hot.json` — Currently trending. Use only if the user asks for "trending" or "popular" ideas.
+
+**Example for "r/Startup_Ideas, last 24 hours":**
+```bash
+curl -s -H "User-Agent: StartupIdeaValidator/1.0" "https://www.reddit.com/r/Startup_Ideas/new.json?limit=100"
+```
+Then filter results by `data.children[].data.created_utc` to only include posts within the user's time window.
+
+**Example for "r/SaaS, last 30 days":**
+```bash
+curl -s -H "User-Agent: StartupIdeaValidator/1.0" "https://www.reddit.com/r/SaaS/top.json?t=month&limit=100"
+```
+
+**Important:**
+- Always send a `User-Agent` header — Reddit blocks requests without one.
+- Parse the JSON response: each post is in `data.children[].data` with fields `title`, `selftext`, `created_utc`, `url`, `permalink`, `score`, `num_comments`.
+- Use `created_utc` (Unix timestamp) to filter posts within the exact time window.
+- If the first page doesn't cover the full time window, paginate using `after`.
+- Posts with higher `score` and `num_comments` generally indicate stronger community validation.
 
 ### Hacker News / Product Hunt / Indie Hackers
 Search or browse the specified platform for startup ideas, product launches, or "Show HN" posts within the time window.
