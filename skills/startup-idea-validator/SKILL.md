@@ -5,7 +5,7 @@ license: Apache-2.0
 compatibility: Requires internet access for idea sourcing and competitor research. Designed for Claude Code or similar agents with web access.
 metadata:
   author: gabrieldejesusrodrigues
-  version: "2.0"
+  version: "3.0"
 ---
 
 # Startup Idea Validator
@@ -41,7 +41,29 @@ Search or browse the specified platform for startup ideas, product launches, or 
 Perform web searches for startup ideas matching the user's query and time window. Aggregate results from multiple search queries to maximize coverage.
 
 ### Multiple Sources
-When multiple sources are specified, collect ideas from all of them, deduplicate similar concepts, and note the original source for each idea.
+When multiple sources are specified, collect ideas from all of them and note the original source for each idea. Apply deduplication rules below.
+
+## Idea Deduplication
+
+When collecting from multiple sources (or even within one source), similar ideas will appear. Apply these rules:
+
+1. **Exact duplicates** (same person posted in multiple places): Keep the version with the most detail/comments. Note the other sources.
+2. **Conceptually identical** (different people, same core idea): Merge into one entry. Note all sources. This is a **positive signal** — multiple people independently identifying the same opportunity suggests real demand.
+3. **Same space, different approach** (e.g., two "AI meeting notes" tools with different angles): Keep as separate ideas. Note the overlap and evaluate each on its own merits.
+4. **Vaguely similar** (e.g., "productivity tool" and "task manager"): Keep as separate ideas. No merge needed.
+
+When merging, combine the strongest elements from each source into the evaluation.
+
+## Source Quality Modifier
+
+Not all idea sources are equal. After calculating the raw Final Score, apply a multiplier based on the quality of the source post:
+
+- **1.1x** — Post includes traction data (users, revenue, waitlist), specific customer quotes, or validated demand evidence
+- **1.0x** — Post is well-detailed with clear problem statement, proposed solution, and target audience (default)
+- **0.9x** — Post is a brief description with some useful detail but missing key context
+- **0.8x** — Post is a one-liner braindump, vague concept, or "wouldn't it be cool if" with no substance
+
+Apply the modifier to the Final Score and note it in the output. This prevents well-analyzed low-quality posts from outranking strong ideas with less analysis surface.
 
 ## Source Discipline
 
@@ -146,12 +168,37 @@ Output:
 
 See [references/risk-agent.md](references/risk-agent.md) for detailed evaluation criteria.
 
+## Conflict Resolution Protocol
+
+When agents disagree, apply these rules in order:
+
+### Devil's Advocate Veto
+The Devil's Advocate can veto an idea (override positive Product and Business scores) **only if**:
+- Risk Score > 75 (Critical Risk), OR
+- Two or more risk categories are at their maximum score
+
+If the veto triggers, the idea's Final Verdict is automatically **Reject** regardless of other scores. Note the veto in the synthesis.
+
+### Business Score Breaks Ties
+When Product and Devil's Advocate disagree (Product says strong, Devil's Advocate says risky, or vice versa) and no veto applies:
+- **Business Score decides.** Business Score > 60 favors the optimistic agent. Business Score < 40 favors the pessimistic agent. Business Score 40-60 is a wash — apply the formula as-is.
+
+### Score Override Rules
+The orchestrator may manually adjust the Final Score by up to +/-10 points when:
+- An agent's score is clearly inconsistent with its own analysis (e.g., Business Score 75 but the text describes a saturated market with no clear monetization)
+- Two agents flag the same critical issue but only one's score reflects it
+- The source quality modifier significantly changes the ranking order
+
+All manual adjustments must be explained in the synthesis with specific reasoning.
+
 ## Final Scoring Model
 
 Final Score (0-100) calculated as:
 - Product Score: **30%**
 - Business Score: **40%**
 - (100 - Risk Score): **30%**
+
+Then apply the Source Quality Modifier (0.8x to 1.1x).
 
 Explain any manual adjustments applied.
 
@@ -164,35 +211,49 @@ For each qualifying idea, output the following structure:
 
 ### Source
 [Platform name, URL to original post if available]
+Source Quality: (1.1x / 1.0x / 0.9x / 0.8x) — [brief justification]
 
 ### Original Post Summary
 One-sentence summary from the source.
 
 ### Product Specialist Analysis
-- Product Score:
-- MVP Feasibility:
+- Product Score: X/100
+- Engineering Complexity: (Low / Medium / High)
+- MVP Feasibility: (30 / 60 / 90+ days)
+- Platform/API Dependencies: [list or "None"]
 - Key Strengths:
 - Key Weaknesses:
+- Retention Signal: (Daily / Weekly / Monthly / One-time)
 - Feature vs Company Verdict:
 
 ### Business Analyst Analysis
-- Business Score:
-- TAM/SAM/SOM:
+- Business Score: X/100
+- Model: (B2B / B2C / B2B2C)
+- TAM/SAM/SOM: [with math]
+- Unit Economics: ARPU $X/mo, CAC ~$X, LTV:CAC X:1, Payback Xmo
 - Competitors (with URLs):
+- Pricing Benchmark: [what users currently pay for alternatives]
 - Monetization Model:
-- Month 6 Revenue Estimate:
-- Month 12 Revenue Estimate:
-- Competitive Saturation Level:
+- Month 6 Revenue Estimate: $X MRR [with assumptions]
+- Month 12 Revenue Estimate: $X MRR [with assumptions]
+- Competitive Saturation Level: (Low / Medium / High)
 
 ### Devil's Advocate Analysis
-- Risk Score:
-- Top Failure Scenarios:
+- Risk Score: X/100 (Low/Moderate/High/Critical Risk)
+- Top 5 Failure Scenarios:
+  1. [Scenario] — Likelihood: X, Impact: X, Mitigation: X
+  2. ...
 - Unrealistic Assumptions:
 - Regulatory Exposure:
-- Kill or Continue:
+- Founder Domain Risk: (Low / Medium / High)
+- Timing Assessment: (Good / Uncertain / Bad)
+- Kill or Continue: [with conditions if Conditional Continue]
 
 ### Final Synthesis & Decision
-- Adjusted Final Score:
+- Raw Score: X/100
+- Source Quality Modifier: Xx
+- Adjusted Final Score: X/100
+- Agent Disagreements: [describe any conflicts and how they were resolved]
 - Why it ranks here:
 - Time to First Revenue Estimate:
 - Final Verdict: (Strong Candidate / Moderate / Weak / Reject)
