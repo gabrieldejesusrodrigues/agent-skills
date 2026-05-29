@@ -15,6 +15,7 @@ npx skills add gabrieldejesusrodrigues/agent-skills
 | Skill | Description |
 |-------|-------------|
 | [startup-idea-validator](skills/startup-idea-validator/) | Multi-agent startup idea validation system. Searches any user-specified source (Reddit, HN, Product Hunt, web) within a user-specified time window and evaluates ideas through Product, Business, and Devil's Advocate agent perspectives |
+| [tdd-lanes](skills/tdd-lanes/) | Separate test authorship from implementation to get contract-level, non-overfit tests. A test author (no implementation context) writes failing tests from a spec; a different implementer makes them pass without weakening assertions. Stack-agnostic; lightweight and strict modes |
 
 ## License
 
