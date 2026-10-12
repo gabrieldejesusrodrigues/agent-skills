@@ -53,8 +53,9 @@ safe way to roll this out.
 ```
 **Summary:** <one or two lines on what the PR does and the overall assessment>
 **Verdict:** Approve | Approve with comments | Request changes | Needs discussion
-**Reviewed:** <areas and layers>
-**Not reviewed:** <areas and layers, and why: out of scope, needs another reviewer, time>
+**Reviewed:** <sections, areas and layers>
+**Skimmed:** <supporting sections checked as mechanical, if any>
+**Not reviewed:** <sections, areas and layers, and why: out of scope, needs another reviewer, time>
 **Blocking:** <n> · **Non-blocking:** <n>
 ```
 

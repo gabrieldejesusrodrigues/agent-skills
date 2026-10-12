@@ -8,21 +8,27 @@
 
 ## 1. Intent
 
-- Stated intent:
+- Stated intent (numbered):
 - Missing from the description:
 - Reviewer's hypothesis (verbatim):
 
 ## 2. Map of the affected area (before)
 
-## 3. Shape
+## 3. Shape and guide
 
-- Size, commits, risk surfaces:
-- Reading order:
+- Size by category, commits, risk surfaces:
 
-## 4. Areas
+| # | Section | Kind | Where | Lines | Risk | Intent |
+|---|---|---|---|---|---|---|
 
-### <area>
+- Not explained by the description:
+- Intent items with no matching change:
 
+## 4. Sections
+
+### <#>. <section>
+
+- What and why:
 - Behavior, before → after:
 - Blast radius:
 - History:
@@ -30,9 +36,13 @@
 - Reviewer's findings (label · blocking?):
 - Open questions:
 
+### Supporting sections
+
+- <#>. <section>: <evidence> · skimmed | promoted
+
 ## 5. Verdict
 
-- Reviewed / not reviewed:
+- Reviewed / skimmed with evidence / not reviewed:
 - Reviewer's verdict (verbatim):
 
 ## 6. Second opinion
