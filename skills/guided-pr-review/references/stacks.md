@@ -24,7 +24,7 @@ scripts/pr_shape.sh origin/<head-1> origin/<head-2>
 
 1. **Phase 1 for the whole stack.** Read every layer's title and description. Report the overall goal and how the work was split. Checkpoint, at try-first `full` or `light`: "Before looking at the layers: how would you have split this?"
 2. **Phase 3 for the whole stack.** Present the `stack_map.sh` output. Propose reviewing bottom-up: each layer's base has then already been reviewed, and the bottom layers merge first. Reading the top first to see the end state is a valid alternative for understanding, but judge layers bottom-up.
-3. **Phases 2 to 5 per layer**, with that layer's base as `<base>` for `pr_shape.sh` and `familiarity.sh`. Record a verdict per layer.
+3. **Phases 2 to 5 per layer**, with that layer's base as `<base>` for `pr_shape.sh` and `familiarity.sh`, and a change guide per layer. Record a verdict per layer.
 4. **Stack verdict.** A short summary across layers, including what the split itself looks like.
 
 ## Questions specific to stacks

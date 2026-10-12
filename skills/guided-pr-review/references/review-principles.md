@@ -103,6 +103,7 @@ The diff hides most of the risk. For every changed piece, check:
 - Automation bias: confident tool output feels verified. Check the evidence.
 - Confirmation: once you believe the change is fine, you start skimming. In the riskiest area, look actively for evidence that you're wrong.
 - Familiarity: in code you know well, you see what you expect to see. Read the actual lines.
+- Labels: "just a rename", "only wiring" or "mechanical refactor" invite skimming, and a behavior change inside a refactor is easy to miss. Check the label against evidence (`scripts/mechanical_check.sh`) and read whatever it leaves over.
 
 ## 6. Risk triage
 
